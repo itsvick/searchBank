@@ -1,0 +1,31 @@
+<div class="header">
+    The Bank Search
+</div>
+<div>
+    <label>Select City: </label>
+    <select [(ngModel)]="city" (change)="changeCity($event)">
+        <option *ngFor="let city of CITIES" [value]="city">{{city | titlecase}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="text" name="searchBank" placeholder="Search bank" [(ngModel)]="searchKey" />
+
+</div>
+
+<div>
+    <div *ngIf="searchResults.length">
+        <div *ngFor="let bank of (searchResults | searchFilter:searchKey)">
+            <div>
+                <p><strong>Name: {{bank.bank_name}}</strong></p>
+                <p><strong>Branch: </strong> {{bank.branch | titlecase}}</p>
+                <p><strong>IFSC Code: </strong>{{bank.ifsc}}
+                </p>
+                <hr>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<router-outlet></router-outlet>
