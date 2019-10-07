@@ -1,31 +1,40 @@
-<div class="header">
-    The Bank Search
-</div>
-<div>
-    <label>Select City: </label>
-    <select [(ngModel)]="city" (change)="changeCity($event)">
-        <option *ngFor="let city of CITIES" [value]="city">{{city | titlecase}}</option>
-    </select>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="searchBank" placeholder="Search bank" [(ngModel)]="searchKey" />
-
-</div>
-
-<div>
-    <div *ngIf="searchResults.length">
-        <div *ngFor="let bank of (searchResults | searchFilter:searchKey)">
-            <div>
-                <p><strong>Name: {{bank.bank_name}}</strong></p>
-                <p><strong>Branch: </strong> {{bank.branch | titlecase}}</p>
-                <p><strong>IFSC Code: </strong>{{bank.ifsc}}
-                </p>
-                <hr>
-            </div>
+<nav class="navbar sticky-top navbar-default">
+    <h4 class="navbar-brand font-weight-bold">The Bank Search</h4>
+    <div class="form-group">
 
 
-        </div>
+        <select [(ngModel)]="city" (change)="changeCity($event)" class="form-control">
+            <option *ngFor="let city of CITIES" [value]="city">{{city | titlecase}}</option>
+        </select>
     </div>
+    <input type="text" class="form-control" name="searchBank" placeholder="Search bank" [(ngModel)]="searchKey">
+</nav>
 
+<div class="container">
+    <div class="d-flex align-items-center pt-4" *ngIf="loading">
+        <strong>Loading...</strong>
+        <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+    </div>
+    <div *ngIf="searchResults.length && !loading">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">IFSC Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let bank of (searchResults | searchFilter:searchKey); let i=index;">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{bank.bank_name}}</td>
+                    <td>{{bank.branch | titlecase}}</td>
+                    <td>{{bank.ifsc}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <router-outlet></router-outlet>
