@@ -8,7 +8,11 @@ export class SearchFilterPipe implements PipeTransform {
 
     transform(items: any, searchKey: string, excludes: any = []): any {
 
-        const toCompare = searchKey.toLowerCase().split(' ');
+        const toCompare = searchKey.toLowerCase().split(' ').filter(x => x.length);
+
+        if (!toCompare.length) {
+            return items;
+        }
 
         const checkInside = (item: any, term: string) => {
             for (const property in item) {
@@ -26,9 +30,10 @@ export class SearchFilterPipe implements PipeTransform {
             return false;
         };
 
-        return items.filter((item) => {
-            return checkInside(item, searchKey.toLowerCase());
-        });
+        return toCompare.map((key) => {
+            return items.filter((item) => {
+                return checkInside(item, key.toLowerCase());
+            });
+        }).flat();
     }
-
 }
